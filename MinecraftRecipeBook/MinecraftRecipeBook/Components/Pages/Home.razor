@@ -2,6 +2,73 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Recipe Book!</h1>
 
-Welcome to your new app.
+<h3>Welcome to the minecraft recipe book!</h3>
+
+<h3>Current Recipies</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ingredients</th>
+            <th>Count</th>
+            <th>Result</th>
+            <th>Shapeless</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(Recipe recipe in recipes)
+		{
+			<tr>
+				<td>@recipe.Id</td>
+				<td>
+					<table class="table">
+						@for(int j = 0; j < 3; j++)
+						{
+							<tr>
+								@for(int k = 0; k < 3; k++)
+								{
+									int ingredientId = recipe.Ingredients[j * 3 + k];
+									if(ingredientId == -1)
+									{
+										<td>Empty</td>
+									}
+									else
+									{
+										<td>@items[ingredientId].Name</td>
+									}
+								}
+							</tr>
+						}
+					</table>
+					
+				</td>
+				<td>@recipe.Count</td>
+				<td>@items[recipe.Result].Name</td>
+				<td>@(recipe.Shapeless ? "Yes" : "No")</td>
+			</tr>
+		}
+    </tbody>
+</table>
+
+@code {
+	private List<Item> items = new List<Item>()
+	{
+		new Item() { Name = "Oak Planks", ImagePath = null},
+		new Item() { Name = "Stick", ImagePath = null},
+		new Item() { Name = "Crafting Table", ImagePath = null},
+		new Item() { Name = "Wooden Pickaxe", ImagePath = null},
+		new Item() { Name = "Wooden Shovel", ImagePath = null},
+	};
+
+	private List<Recipe> recipes = new List<Recipe>()
+	{
+		new Recipe() { Ingredients = new int[] {-1,0,-1,-1,0,-1,-1,-1,-1}, Count = 4, Result = 1, Shapeless = false}, //sticks
+		new Recipe() { Ingredients = new int[] {0,0,-1,0,0,-1,-1,-1,-1}, Count = 1, Result = 2, Shapeless = false}, //crafting table
+		new Recipe() { Ingredients = new int[] {0,0,0,-1,1,-1,-1,1,-1 }, Count = 1, Result = 3, Shapeless = false}, //wooden pickaxe
+		new Recipe() { Ingredients = new int[] {-1,0,-1,-1,1,-1,-1,1,-1 }, Count = 1, Result = 4, Shapeless = false} //wooden shovel
+	};
+
+}
