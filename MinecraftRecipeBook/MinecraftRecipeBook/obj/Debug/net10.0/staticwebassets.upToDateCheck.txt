@@ -1,5 +1,10 @@
 wwwroot\app.css
 wwwroot\favicon.png
+wwwroot\Images\Crafting_Table.png
+wwwroot\Images\Oak_Planks.png
+wwwroot\Images\Stick.png
+wwwroot\Images\Wooden_Pickaxe.png
+wwwroot\Images\Wooden_Shovel.png
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MinecraftRecipeBook")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cfb9e0c1239d41d551c67a3eac853807c9b37cdf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+307a4830132b848f5da13d5a4e8115faa47077e1")]
 [assembly: System.Reflection.AssemblyProductAttribute("MinecraftRecipeBook")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MinecraftRecipeBook")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

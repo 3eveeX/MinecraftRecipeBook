@@ -33,11 +33,14 @@
 									int ingredientId = recipe.Ingredients[j * 3 + k];
 									if(ingredientId == -1)
 									{
-										<td>Empty</td>
+										<td>---</td>
 									}
 									else
 									{
-										<td>@items[ingredientId].Name</td>
+										<td>
+										<img src=@items[ingredientId].ImagePath alt=@items[ingredientId].Name width="50" />
+										</td>
+										
 									}
 								}
 							</tr>
@@ -46,7 +49,9 @@
 					
 				</td>
 				<td>@recipe.Count</td>
-				<td>@items[recipe.Result].Name</td>
+				<td>
+					<img src=@items[recipe.Result].ImagePath alt=@items[recipe.Result].Name width="50" />
+				</td>
 				<td>@(recipe.Shapeless ? "Yes" : "No")</td>
 			</tr>
 		}
@@ -56,11 +61,11 @@
 @code {
 	private List<Item> items = new List<Item>()
 	{
-		new Item() { Name = "Oak Planks", ImagePath = null},
-		new Item() { Name = "Stick", ImagePath = null},
-		new Item() { Name = "Crafting Table", ImagePath = null},
-		new Item() { Name = "Wooden Pickaxe", ImagePath = null},
-		new Item() { Name = "Wooden Shovel", ImagePath = null},
+		new Item() { Name = "Oak Planks", ImagePath = "images/Oak_Planks.png"},
+		new Item() { Name = "Stick", ImagePath = "images/Stick.png"},
+		new Item() { Name = "Crafting Table", ImagePath = "images/Crafting_Table.png"},
+		new Item() { Name = "Wooden Pickaxe", ImagePath = "images/Wooden_Pickaxe.png"},
+		new Item() { Name = "Wooden Shovel", ImagePath = "images/Wooden_Shovel.png"}
 	};
 
 	private List<Recipe> recipes = new List<Recipe>()
