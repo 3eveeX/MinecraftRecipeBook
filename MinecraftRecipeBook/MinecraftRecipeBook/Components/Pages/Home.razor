@@ -55,6 +55,7 @@
 					<img src=@items[recipe.Result].ImagePath alt=@items[recipe.Result].Name width="50" />
 				</td>
 				<td>@(recipe.Shapeless ? "Yes" : "No")</td>
+				<td><button class="btn btn-danger" @onclick="() => deleteRecipe(recipe.Id)">Delete</button></td>
 			</tr>
 		}
     </tbody>
@@ -135,6 +136,11 @@
 			currentRecipe = new Recipe();
 		}
 		
+	}
+
+	private void deleteRecipe(int id)
+	{
+		recipes.RemoveAll(r => r.Id == id);
 	}
 
 	private static List<Recipe> recipes = new List<Recipe>()
