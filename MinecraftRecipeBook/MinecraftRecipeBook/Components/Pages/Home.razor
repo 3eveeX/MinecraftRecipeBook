@@ -1,4 +1,5 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
@@ -27,13 +28,14 @@
 					<table class="table">
 						@for(int j = 0; j < 3; j++)
 						{
+
 							<tr>
 								@for(int k = 0; k < 3; k++)
 								{
 									int ingredientId = recipe.Ingredients[j * 3 + k];
 									if(ingredientId == -1)
 									{
-										<td>---</td>
+										<td>----------</td>
 									}
 									else
 									{
@@ -58,8 +60,62 @@
     </tbody>
 </table>
 
+<h3>New Recipe</h3>
+
+<EditForm FormName="New Recipe" OnValidSubmit="OnSubmitNewRecipe" Model="currentRecipe">
+	<div>
+		<input type="hidden" value="@currentRecipe.Id" />
+	</div>
+
+	<div>
+		<label for="ingredients">Ingredients:</label>
+		<table class="table">
+			@for (int j = 0; j < 3; j++)
+			{
+				<br/>
+				<tr>
+					@for (int k = 0; k < 3; k++)
+					{
+						int ingredientId = (j * 3 + k);
+						<InputSelect id="result" @bind-Value=currentRecipe.Ingredients[ingredientId]>
+							<option value="-1">Nothing</option>
+							@foreach (Item item in items)
+							{
+								<option value="@item.Id">@item.Name</option>
+							}
+						</InputSelect>
+					}
+				</tr>
+			}
+		</table>
+	</div>
+
+	<div>
+		<label for="count">Count:</label>
+		<InputNumber id="count" @bind-Value="currentRecipe.Count" />
+	</div>
+
+	<div>
+		<label for="result">Output:</label>
+		<InputSelect id="result" @bind-Value=currentRecipe.Result>
+			@foreach (Item item in items)
+			{
+				<option value="@item.Id">@item.Name</option>
+			}
+		</InputSelect>
+	</div>
+
+	<div>
+		<label for="shapeless">Shapeless:</label>
+		<InputCheckbox id="shapeless" @bind-Value="currentRecipe.Shapeless" />
+	</div>
+
+	<button type="submit" style:"btn btn-primary">Submit</button>
+</EditForm>
+
 @code {
-	private List<Item> items = new List<Item>()
+
+	private static List<Item> items = new List<Item>()
 	{
 		new Item() { Name = "Oak Planks", ImagePath = "images/Oak_Planks.png"},
 		new Item() { Name = "Stick", ImagePath = "images/Stick.png"},
@@ -68,7 +124,20 @@
 		new Item() { Name = "Wooden Shovel", ImagePath = "images/Wooden_Shovel.png"}
 	};
 
-	private List<Recipe> recipes = new List<Recipe>()
+
+	private static Recipe? currentRecipe = null;
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		if (currentRecipe == null)
+		{
+			currentRecipe = new Recipe();
+		}
+		
+	}
+
+	private static List<Recipe> recipes = new List<Recipe>()
 	{
 		new Recipe() { Ingredients = new int[] {-1,0,-1,-1,0,-1,-1,-1,-1}, Count = 4, Result = 1, Shapeless = false}, //sticks
 		new Recipe() { Ingredients = new int[] {0,0,-1,0,0,-1,-1,-1,-1}, Count = 1, Result = 2, Shapeless = false}, //crafting table
@@ -76,4 +145,10 @@
 		new Recipe() { Ingredients = new int[] {-1,0,-1,-1,1,-1,-1,1,-1 }, Count = 1, Result = 4, Shapeless = false} //wooden shovel
 	};
 
+	private void OnSubmitNewRecipe()
+	{
+		recipes.Add(currentRecipe);
+		currentRecipe = new Recipe();
+	}
+	
 }
