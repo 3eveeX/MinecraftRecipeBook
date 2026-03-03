@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "v/KFPG5/gvE=",
+  "dgSpecHash": "2R3aIacsBrY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\hatch\\source\\repos\\MinecraftRecipeBook\\MinecraftRecipeBook\\MinecraftRecipeBook\\MinecraftRecipeBook.csproj",
+  "projectFilePath": "C:\\Neumont\\Q2Y2\\PRO150\\MinecraftRecipeBook\\MinecraftRecipeBook\\MinecraftRecipeBook\\MinecraftRecipeBook.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\hatch\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.2\\microsoft.aspnetcore.app.internal.assets.10.0.2.nupkg.sha512"
+    "C:\\Users\\Charles\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.1\\microsoft.aspnetcore.app.internal.assets.10.0.1.nupkg.sha512"
   ],
   "logs": []
 }

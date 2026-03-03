@@ -7,6 +7,81 @@
 
 <h3>Welcome to the minecraft recipe book!</h3>
 
+<h3>New Recipe</h3>
+
+<EditForm FormName="New Recipe" OnValidSubmit="OnSubmitNewRecipe" Model="currentRecipe">
+	<div>
+		<input type="hidden" value="@currentRecipe.Id" />
+	</div>
+
+	<div>
+		<label for="ingredients">Ingredients:</label>
+		<table class="table">
+			@for (int j = 0; j < 3; j++)
+			{
+				<br/>
+				<tr>
+					@for (int k = 0; k < 3; k++)
+					{
+						int ingredientId = (j * 3 + k);
+						<InputSelect id="result" @bind-Value=currentRecipe.Ingredients[ingredientId]>
+							<option value="-1">Nothing</option>
+							@foreach (Item item in items)
+							{
+								<option value="@item.Id">@item.Name</option>
+							}
+						</InputSelect>
+					}
+				</tr>
+			}
+		</table>
+	</div>
+
+	<div>
+		<label for="count">Count:</label>
+		<InputNumber id="count" @bind-Value="currentRecipe.Count" />
+	</div>
+
+	<div>
+		<label for="result">Output:</label>
+		<InputSelect id="result" @bind-Value=currentRecipe.Result>
+			@foreach (Item item in items)
+			{
+				<option value="@item.Id">@item.Name</option>
+			}
+		</InputSelect>
+	</div>
+
+	<div>
+		<label for="shapeless">Shapeless:</label>
+		<InputCheckbox id="shapeless" @bind-Value="currentRecipe.Shapeless" />
+	</div>
+
+	<button type="submit" style:"btn btn-primary">Submit</button>
+</EditForm>
+
+<br>
+<h3>New Item</h3>
+
+<EditForm FormName="New Item" OnValidSubmit="OnSubmitNewItem" Model="currentItem">
+	<div>
+		<input type="hidden" value="@currentItem.Id" />
+	</div>
+
+	<div>
+		<label for="item">name</label>
+		<InputText id="item" @bind-Value="currentItem.Name"/>
+	</div>
+
+	<div>
+		<label for="image">imageURL:</label>
+		<InputText id="image" @bind-Value="currentItem.ImagePath" />
+	</div>
+	
+
+	<button type="submit" style:"btn btn-primary">Submit</button>
+</EditForm>
+
 <h3>Current Recipies</h3>
 
 <table class="table">
@@ -61,58 +136,27 @@
     </tbody>
 </table>
 
-<h3>New Recipe</h3>
+<h3>Current Items</h3>
 
-<EditForm FormName="New Recipe" OnValidSubmit="OnSubmitNewRecipe" Model="currentRecipe">
-	<div>
-		<input type="hidden" value="@currentRecipe.Id" />
-	</div>
-
-	<div>
-		<label for="ingredients">Ingredients:</label>
-		<table class="table">
-			@for (int j = 0; j < 3; j++)
-			{
-				<br/>
-				<tr>
-					@for (int k = 0; k < 3; k++)
-					{
-						int ingredientId = (j * 3 + k);
-						<InputSelect id="result" @bind-Value=currentRecipe.Ingredients[ingredientId]>
-							<option value="-1">Nothing</option>
-							@foreach (Item item in items)
-							{
-								<option value="@item.Id">@item.Name</option>
-							}
-						</InputSelect>
-					}
-				</tr>
-			}
-		</table>
-	</div>
-
-	<div>
-		<label for="count">Count:</label>
-		<InputNumber id="count" @bind-Value="currentRecipe.Count" />
-	</div>
-
-	<div>
-		<label for="result">Output:</label>
-		<InputSelect id="result" @bind-Value=currentRecipe.Result>
-			@foreach (Item item in items)
-			{
-				<option value="@item.Id">@item.Name</option>
-			}
-		</InputSelect>
-	</div>
-
-	<div>
-		<label for="shapeless">Shapeless:</label>
-		<InputCheckbox id="shapeless" @bind-Value="currentRecipe.Shapeless" />
-	</div>
-
-	<button type="submit" style:"btn btn-primary">Submit</button>
-</EditForm>
+<table class="table">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Image</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(Item item in items)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.Name</td>
+				<td><img src="@item.ImagePath" alt="Cover image for @item.Name" width="100" /></td>
+			</tr>
+		}
+	</tbody>
+</table>
 
 @code {
 
@@ -128,12 +172,18 @@
 
 	private static Recipe? currentRecipe = null;
 
+	private static Item? currentItem = null;
+
 	protected override void OnInitialized()
 	{
 		base.OnInitialized();
 		if (currentRecipe == null)
 		{
 			currentRecipe = new Recipe();
+		}
+		if (currentItem == null)
+		{
+			currentItem = new Item();
 		}
 		
 	}
@@ -155,6 +205,12 @@
 	{
 		recipes.Add(currentRecipe);
 		currentRecipe = new Recipe();
+	}
+
+	private void OnSubmitNewItem()
+	{
+		items.Add(currentItem);
+		currentItem = new Item();
 	}
 	
 }
