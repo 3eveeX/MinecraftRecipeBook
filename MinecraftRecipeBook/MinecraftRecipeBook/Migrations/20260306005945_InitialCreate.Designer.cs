@@ -10,7 +10,7 @@ using MinecraftRecipeBook.Data;
 namespace MinecraftRecipeBook.Migrations
 {
     [DbContext(typeof(RecipeContext))]
-    [Migration("20260305235055_InitialCreate")]
+    [Migration("20260306005945_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace MinecraftRecipeBook.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.3");
 
-            modelBuilder.Entity("MinecraftRecipeBook.Models.Recipe", b =>
+            modelBuilder.Entity("Recipe", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -28,7 +28,7 @@ namespace MinecraftRecipeBook.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
-                    b.PrimitiveCollection<string>("Ingredients")
+                    b.Property<string>("Ingredients")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MinecraftRecipeBook.Models;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace MinecraftRecipeBook.Data
 {
@@ -9,5 +10,20 @@ namespace MinecraftRecipeBook.Data
         public DbSet<Recipe> Recipes { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
              => options.UseSqlite("Data Source=recipes.db");
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Recipe>()
+                .Property(r => r.Ingredients)
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                    v => JsonSerializer.Deserialize<int[]>(v, (JsonSerializerOptions)null)
+                );
+        }
+
+    public IEnumerable<Recipe> GetAllRecipes()
+        {
+            return Recipes;
+        }
     }
 }

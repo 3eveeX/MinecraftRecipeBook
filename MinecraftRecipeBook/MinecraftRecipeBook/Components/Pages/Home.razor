@@ -130,6 +130,8 @@
 
 	private static Recipe? currentRecipe = null;
 
+	private static List<Recipe> recipes;
+
 	protected override void OnInitialized()
 	{
 		base.OnInitialized();
@@ -137,21 +139,18 @@
 		{
 			currentRecipe = new Recipe();
 		}
+		recipes = Db.GetAllRecipes().ToList();
 
 	}
 
 	private void deleteRecipe(int id)
 	{
-		Db.Recipes.Remove(recipes.FirstOrDefault(r => r.Id == id));
+		var entity = Db.Recipes.Find(id);
+		if (entity == null) return; // nothing to delete
+		Db.Recipes.Remove(entity);
+		Db.SaveChanges();
 	}
 
-	private static List<Recipe> recipes = new List<Recipe>()
-	{
-		new Recipe() { Ingredients = new int[] {-1,0,-1,-1,0,-1,-1,-1,-1}, Count = 4, Result = 1, Shapeless = false}, //sticks
-		new Recipe() { Ingredients = new int[] {0,0,-1,0,0,-1,-1,-1,-1}, Count = 1, Result = 2, Shapeless = false}, //crafting table
-		new Recipe() { Ingredients = new int[] {0,0,0,-1,1,-1,-1,1,-1 }, Count = 1, Result = 3, Shapeless = false}, //wooden pickaxe
-		new Recipe() { Ingredients = new int[] {-1,0,-1,-1,1,-1,-1,1,-1 }, Count = 1, Result = 4, Shapeless = false} //wooden shovel
-	};
 
 	// private void OnSubmitNewRecipe()
 	// {
