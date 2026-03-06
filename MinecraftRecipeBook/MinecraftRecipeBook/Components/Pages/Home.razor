@@ -149,6 +149,7 @@
 		if (entity == null) return; // nothing to delete
 		Db.Recipes.Remove(entity);
 		Db.SaveChanges();
+		recipes = Db.GetAllRecipes().ToList();
 	}
 
 
@@ -161,8 +162,9 @@
 	public async Task AddRecipe()
 	{
 		Db.Recipes.Add(currentRecipe);
-		await Db.SaveChangesAsync();
+		Db.SaveChanges();
 		currentRecipe = new Recipe();
+		recipes = Db.GetAllRecipes().ToList();
 	}
 
 	List<Dictionary<string, string>> logins = new List<Dictionary<string, string>>
