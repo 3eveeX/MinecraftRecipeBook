@@ -1,5 +1,7 @@
 ﻿@page "/"
+@using MinecraftRecipeBook.Data
 @rendermode InteractiveServer
+@inject RecipeContext Db
 
 <PageTitle>Home</PageTitle>
 
@@ -63,7 +65,7 @@
 
 <h3>New Recipe</h3>
 
-<EditForm FormName="New Recipe" OnValidSubmit="OnSubmitNewRecipe" Model="currentRecipe">
+<EditForm FormName="New Recipe" OnValidSubmit="AddRecipe" Model="currentRecipe">
 	<div>
 		<input type="hidden" value="@currentRecipe.Id" />
 	</div>
@@ -135,12 +137,12 @@
 		{
 			currentRecipe = new Recipe();
 		}
-		
+
 	}
 
 	private void deleteRecipe(int id)
 	{
-		recipes.RemoveAll(r => r.Id == id);
+		Db.Recipes.Remove(recipes.FirstOrDefault(r => r.Id == id));
 	}
 
 	private static List<Recipe> recipes = new List<Recipe>()
@@ -151,10 +153,39 @@
 		new Recipe() { Ingredients = new int[] {-1,0,-1,-1,1,-1,-1,1,-1 }, Count = 1, Result = 4, Shapeless = false} //wooden shovel
 	};
 
-	private void OnSubmitNewRecipe()
+	// private void OnSubmitNewRecipe()
+	// {
+	// 	Db.Recipes.Add(currentRecipe);
+	// 	currentRecipe = new Recipe();
+	// }
+
+	public async Task AddRecipe()
 	{
-		recipes.Add(currentRecipe);
+		Db.Recipes.Add(currentRecipe);
+		await Db.SaveChangesAsync();
 		currentRecipe = new Recipe();
 	}
-	
+
+	List<Dictionary<string, string>> logins = new List<Dictionary<string, string>>
+	{
+		new Dictionary<string, string>() { { "admin", "Passw0rd" }}
+	};
+
+	private void addLogin(string username, string password)
+	{
+		logins.Add(new Dictionary<string, string>() { { username, password } });
+	}
+
+	private bool validateLogin(string username, string password)
+	{
+		foreach (var login in logins)
+		{
+			if (login.ContainsKey(username) && login[username] == password)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
