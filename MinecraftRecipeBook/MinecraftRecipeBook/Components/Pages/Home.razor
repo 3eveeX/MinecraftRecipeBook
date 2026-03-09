@@ -65,6 +65,7 @@
 
 <h3>New Recipe</h3>
 
+@if(loggedIn){
 <EditForm FormName="New Recipe" OnValidSubmit="AddRecipe" Model="currentRecipe">
 	<div>
 		<input type="hidden" value="@currentRecipe.Id" />
@@ -115,9 +116,24 @@
 
 	<button type="submit" style:"btn btn-primary">Submit</button>
 </EditForm>
-
+}
+else
+{
+	<h3>Login</h3>
+	<div>
+		<label for="username">Username:</label>
+		<InputText id="username" @bind-Value="username" />
+	</div>
+	<div>
+		<label for="password">Password:</label>
+		<InputText id="password" @bind-Value="password" type="password" />
+	</div>
+	<button class="btn btn-primary" @onclick="() => loggedIn = validateLogin(username, password)">Login</button>
+}
 @code {
-
+	bool loggedIn = false;
+	string username = "";
+	string password = "";
 	private static List<Item> items = new List<Item>()
 	{
 		new Item() { Name = "Oak Planks", ImagePath = "images/Oak_Planks.png"},
@@ -183,10 +199,17 @@
 		{
 			if (login.ContainsKey(username) && login[username] == password)
 			{
-				return true;
+				loggedIn = true;
+				return loggedIn;
+			}
+			else
+			{
+				loggedIn = false;
 			}
 		}
-		return false;
+		return loggedIn;
 	}
+
+	
 
 }
