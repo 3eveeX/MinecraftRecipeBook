@@ -63,6 +63,30 @@
     </tbody>
 </table>
 
+<!--
+	item list
+-->
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Image</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (Item item in items)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.Name</td>
+				<td><img src=@item.ImagePath alt=@item.Name width="50" /> </td>
+			</tr>
+		}
+	</tbody>
+</table>
+
 <h3>New Recipe</h3>
 
 @if(loggedIn){
@@ -130,6 +154,8 @@ else
 	</div>
 	<button class="btn btn-primary" @onclick="() => loggedIn = validateLogin(username, password)">Login</button>
 }
+
+
 @code {
 	bool loggedIn = false;
 	string username = "";
@@ -182,6 +208,8 @@ else
 		currentRecipe = new Recipe();
 		recipes = Db.GetAllRecipes().ToList();
 	}
+
+	
 
 	List<Dictionary<string, string>> logins = new List<Dictionary<string, string>>
 	{
