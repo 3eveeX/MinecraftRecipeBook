@@ -1,0 +1,48 @@
+﻿@page "/items/{SelectedId:int}"
+@using MinecraftRecipeBook.Data
+@rendermode InteractiveServer
+@inject ItemContext DbI
+
+@if (Item == null)
+{
+	<p>This Item doesn't Exist!</p>
+}
+else
+{
+	<h1>@Item.Name</h1>
+	<img src="@Item.ImagePath" alt="@Item.Name" width="100" />
+	<EditForm FormName="ItemEdit" OnSubmit="SaveChanges" Model="Item">
+		<div class="mb-3">
+			<label for="nameInput" class="form-label">Name</label>
+			<InputText id="nameInput" class="form-control" @bind-Value="Item.Name" />
+		</div>
+
+		<div class="mb-3">
+			<label for="imagePathInput" class="form-label">Image Path</label>
+			<InputText id="imagePathInput" class="form-control" @bind-Value="Item.ImagePath" />
+		</div>
+		<button type="submit" class="btn btn-primary">Save Changes</button>
+	</EditForm>
+}
+
+@code {
+	[Parameter]
+	public int SelectedId { get; set; }
+
+	public Item? Item { get; set; } = null;
+
+	protected override void OnParametersSet()
+	{
+		base.OnParametersSet();
+		Item = DbI.Items.Find(SelectedId);
+	}
+
+	public void SaveChanges()
+	{
+		if (Item != null)
+		{
+			DbI.Items.Update(Item);
+			DbI.SaveChanges();
+		}
+	}
+}

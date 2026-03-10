@@ -84,7 +84,16 @@
 		@foreach (Item item in items)
 		{
 			<tr>
-				<td>@item.Name</td>
+				@if (loggedIn)
+				{
+					<td>
+						<a href="/items/@item.Id">@item.Name</a>
+					</td>
+				}
+				else
+				{
+					<td>@item.Name</td>
+				}
 				<td><img src=@item.ImagePath alt=@item.Name width="50" /> </td>
 				@if (loggedIn)
 				{
