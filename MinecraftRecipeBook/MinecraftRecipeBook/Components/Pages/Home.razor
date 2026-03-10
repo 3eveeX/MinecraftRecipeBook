@@ -1,7 +1,8 @@
 ﻿@page "/"
 @using MinecraftRecipeBook.Data
 @rendermode InteractiveServer
-@inject RecipeContext Db
+@inject RecipeContext DbR
+@inject ItemContext DbI
 
 <PageTitle>Home</PageTitle>
 
@@ -160,19 +161,14 @@ else
 	bool loggedIn = false;
 	string username = "";
 	string password = "";
-	private static List<Item> items = new List<Item>()
-	{
-		new Item() { Name = "Oak Planks", ImagePath = "images/Oak_Planks.png"},
-		new Item() { Name = "Stick", ImagePath = "images/Stick.png"},
-		new Item() { Name = "Crafting Table", ImagePath = "images/Crafting_Table.png"},
-		new Item() { Name = "Wooden Pickaxe", ImagePath = "images/Wooden_Pickaxe.png"},
-		new Item() { Name = "Wooden Shovel", ImagePath = "images/Wooden_Shovel.png"}
-	};
-
 
 	private static Recipe? currentRecipe = null;
 
+	private static Item? currentItem = null;
+
 	private static List<Recipe> recipes;
+
+	private static List<Item> items;
 
 	protected override void OnInitialized()
 	{
@@ -181,17 +177,23 @@ else
 		{
 			currentRecipe = new Recipe();
 		}
-		recipes = Db.GetAllRecipes().ToList();
+		recipes = DbR.GetAllRecipes().ToList();
+
+		if (currentItem == null)
+		{
+			currentItem = new Item();
+		}
+		items = DbI.GetAllItems().ToList();
 
 	}
 
 	private void deleteRecipe(int id)
 	{
-		var entity = Db.Recipes.Find(id);
+		var entity = DbR.Recipes.Find(id);
 		if (entity == null) return; // nothing to delete
-		Db.Recipes.Remove(entity);
-		Db.SaveChanges();
-		recipes = Db.GetAllRecipes().ToList();
+		DbR.Recipes.Remove(entity);
+		DbR.SaveChanges();
+		recipes = DbR.GetAllRecipes().ToList();
 	}
 
 
@@ -203,10 +205,10 @@ else
 
 	public async Task AddRecipe()
 	{
-		Db.Recipes.Add(currentRecipe);
-		Db.SaveChanges();
+		DbR.Recipes.Add(currentRecipe);
+		DbR.SaveChanges();
 		currentRecipe = new Recipe();
-		recipes = Db.GetAllRecipes().ToList();
+		recipes = DbR.GetAllRecipes().ToList();
 	}
 
 	

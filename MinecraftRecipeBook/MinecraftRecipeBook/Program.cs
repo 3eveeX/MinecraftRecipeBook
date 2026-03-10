@@ -8,6 +8,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddDbContext<RecipeContext>();
+builder.Services.AddDbContext<ItemContext>();
 
 var app = builder.Build();
 
