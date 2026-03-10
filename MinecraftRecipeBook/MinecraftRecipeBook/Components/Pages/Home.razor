@@ -15,7 +15,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Ingredients</th>
             <th>Count</th>
             <th>Result</th>
@@ -26,7 +25,6 @@
         @foreach(Recipe recipe in recipes)
 		{
 			<tr>
-				<td>@recipe.Id</td>
 				<td>
 					<table class="table">
 						@for(int j = 0; j < 3; j++)
@@ -36,16 +34,16 @@
 								@for(int k = 0; k < 3; k++)
 								{
 									int ingredientId = recipe.Ingredients[j * 3 + k];
-									if(ingredientId == -1)
+									var item = items.FirstOrDefault(i => i.Id == ingredientId);
+									@if (item != null)
 									{
-										<td>----------</td>
+										<td>
+											<img src="@item.ImagePath" alt="@item.Name" width="50" />
+										</td>
 									}
 									else
 									{
-										<td>
-										<img src=@items[ingredientId].ImagePath alt=@items[ingredientId].Name width="50" />
-										</td>
-										
+										<td>----------</td>
 									}
 								}
 							</tr>
@@ -55,10 +53,15 @@
 				</td>
 				<td>@recipe.Count</td>
 				<td>
-					<img src=@items[recipe.Result].ImagePath alt=@items[recipe.Result].Name width="50" />
+					@{
+						var resitem = items.FirstOrDefault(i => i.Id == recipe.Result);
+						<img src=@resitem.ImagePath alt=@resitem.Name width="50" />
+					}
 				</td>
 				<td>@(recipe.Shapeless ? "Yes" : "No")</td>
+				@if (loggedIn){
 				<td><button class="btn btn-danger" @onclick="() => deleteRecipe(recipe.Id)">Delete</button></td>
+				}
 			</tr>
 		}
     </tbody>
@@ -68,10 +71,11 @@
 	item list
 -->
 
+<h3> Current Items</h3>
+
 <table class="table">
 	<thead>
 		<tr>
-			<th>Id</th>
 			<th>Name</th>
 			<th>Image</th>
 		</tr>
@@ -80,17 +84,20 @@
 		@foreach (Item item in items)
 		{
 			<tr>
-				<td>@item.Id</td>
 				<td>@item.Name</td>
 				<td><img src=@item.ImagePath alt=@item.Name width="50" /> </td>
+				@if (loggedIn)
+				{
+					<td><button class="btn btn-danger" @onclick="() => deleteItem(item.Id)">Delete</button></td>
+				}
 			</tr>
 		}
 	</tbody>
 </table>
 
-<h3>New Recipe</h3>
 
 @if(loggedIn){
+	<h3>New Recipe</h3>
 <EditForm FormName="New Recipe" OnValidSubmit="AddRecipe" Model="currentRecipe">
 	<div>
 		<input type="hidden" value="@currentRecipe.Id" />
@@ -141,6 +148,22 @@
 
 	<button type="submit" style:"btn btn-primary">Submit</button>
 </EditForm>
+	<br>
+	<h3>New Item</h3>
+<EditForm FormName="New Item" OnValidSubmit="AddItem" Model="currentItem">
+	<div>
+		<input type="hidden" value="@currentItem.Id" />
+	</div>
+	<div>
+		<label for="name">Name:</label>
+		<InputText id="name" @bind-Value="currentItem.Name" />
+	</div>
+	<div>
+		<label for="imagePath">Image Path:</label>
+		<InputText id="imagePath" @bind-Value="currentItem.ImagePath" />
+	</div>
+		<button type="submit" style:"btn btn-primary">Submit</button>
+</EditForm>
 }
 else
 {
@@ -176,6 +199,7 @@ else
 		if (currentRecipe == null)
 		{
 			currentRecipe = new Recipe();
+			currentRecipe.Ingredients = new int[9] { 1,1,1,1,1,1,1,1,1 };
 		}
 		recipes = DbR.GetAllRecipes().ToList();
 
@@ -196,6 +220,15 @@ else
 		recipes = DbR.GetAllRecipes().ToList();
 	}
 
+	private void deleteItem(int id)
+	{
+		var entity = DbI.Items.Find(id);
+		if (entity == null) return; // nothing to delete
+		DbI.Items.Remove(entity);
+		DbI.SaveChanges();
+		items = DbI.GetAllItems().ToList();
+	}
+
 
 	// private void OnSubmitNewRecipe()
 	// {
@@ -208,7 +241,16 @@ else
 		DbR.Recipes.Add(currentRecipe);
 		DbR.SaveChanges();
 		currentRecipe = new Recipe();
+		currentRecipe.Ingredients = new int[9] { 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 		recipes = DbR.GetAllRecipes().ToList();
+	}
+
+	public async Task AddItem()
+	{
+		DbI.Items.Add(currentItem);
+		DbI.SaveChanges();
+		currentItem = new Item();
+		items = DbI.GetAllItems().ToList();
 	}
 
 	
